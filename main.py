@@ -1,5 +1,12 @@
 from skimage.filters import median
 from skimage.morphology import ball
+from image_utils import load_image, edge_detection
+from PIL import Image
+from skimage.filters import median
+from skimage.morphology import ball
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.signal import convolve2d
 image_array = load_image('/content/lena.jpg')
 clean_image = median(image_array, ball(3))
 edgeMAG = edge_detection(clean_image)
