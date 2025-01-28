@@ -1,5 +1,6 @@
 from skimage.filters import median
 from skimage.morphology import ball
+from image_utils import edge_detection,load_image
 image_array = load_image('/content/lena.jpg')
 clean_image = median(image_array, ball(3))
 edgeMAG = edge_detection(clean_image)
