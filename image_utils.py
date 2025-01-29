@@ -8,7 +8,7 @@ from skimage.morphology import ball
 import numpy as np
 import matplotlib.pyplot as plt
 def load_image(path):
-    image = Image.open('/content/lena.jpg')
+    image = Image.open(path)
     image_array = np.array(image)
     return image_array
 
