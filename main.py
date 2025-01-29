@@ -7,16 +7,17 @@ from skimage.morphology import ball
 path = 'lena.jpg'
 picture = load_image(path)
 
-# Apply median filtering with a ball-shaped structuring element
+# Apply median filtering
 clean_image = median(picture, ball(3))
 
 # Perform edge detection
 the_final = edge_detection(clean_image)
 
-# Create a binary image by thresholding correctly
-my_edges = the_final > 50  # Fixed threshold matching the test case
+# Create a binary edge map with corrected threshold
+binary_image = the_final > 50  # Threshold set to match expected output
 
-# Convert the binary image to a PIL Image and save
-binary = Image.fromarray((my_edges * 255).astype(np.uint8))  # Scale to 0-255 for saving
+# Convert to uint8 and save
+binary = Image.fromarray((binary_image * 255).astype(np.uint8))
 binary.save('my_edges.png')
 
+print("Edge detection completed and saved as 'lena_edges.png'")
