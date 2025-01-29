@@ -1,8 +1,8 @@
 from PIL import Image
 import numpy as np
 from scipy.signal import convolve2d
-
-path = 'lena.jpg'
+from skimage.filters import median
+from skimage.morphology import ball
 
 def load_image(path):
     """
@@ -14,9 +14,8 @@ def load_image(path):
     Returns:
         np.ndarray: The loaded image as a numpy array.
     """
-    image = Image.open(path)
-    image = np.array(image)
-    return image
+    image = Image.open(path).convert('RGB')  # Ensure RGB format
+    return np.array(image)
 
 def edge_detection(image):
     """
@@ -28,16 +27,17 @@ def edge_detection(image):
     Returns:
         np.ndarray: Magnitude of edges detected in the image.
     """
-    grey_night = np.mean(image, axis=2)  # Convert to grayscale by averaging channels
-    
+    # Convert to grayscale using correct weights
+    gray_image = np.dot(image[..., :3], [0.2989, 0.5870, 0.1140])
+
     # Sobel kernels
     kernel_y = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]])
     kernel_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
-    
+
     # Apply convolution
-    edge_x = convolve2d(grey_night, kernel_x, mode='same', boundary='symm')
-    edge_y = convolve2d(grey_night, kernel_y, mode='same', boundary='symm')
-    
-    # Compute edge magnitude
-    edgeMAG = np.sqrt(edge_x*2 + edge_y*2)
-    return edgeMAG
+    edge_x = convolve2d(gray_image, kernel_x, mode='same', boundary='symm')
+    edge_y = convolve2d(gray_image, kernel_y, mode='same', boundary='symm')
+
+    # Compute edge magnitude correctly
+    edge_mag = np.sqrt(edge_x**2 + edge_y**2)  # Corrected **2 exponent
+    return edge_mag
